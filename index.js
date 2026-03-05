@@ -7,7 +7,7 @@ const client = new Client({
   ] 
 });
 
-const token = process.env.DISCORD_TOKEN; // Railway'de environment variable olarak tanımlanacak
+const token = process.env.TOKEN; // Railway'de environment variable olarak tanımlanacak
 
 client.once('ready', () => {
   console.log(`${client.user.tag} olarak giriş yapıldı ve aktif!`);
