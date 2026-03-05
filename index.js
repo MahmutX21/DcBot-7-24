@@ -3,22 +3,26 @@ const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent // Mesaj içeriğini okumak için gerekli
+    GatewayIntentBits.MessageContent
   ] 
 });
 
-const token = process.env.TOKEN; // Railway'de environment variable olarak tanımlanacak
+// Değişen satır:
+const token = process.env.TOKEN;
+
+if (!token) {
+  console.error('❌ TOKEN environment variable bulunamadı!');
+  process.exit(1);
+}
 
 client.once('ready', () => {
-  console.log(`${client.user.tag} olarak giriş yapıldı ve aktif!`);
-  // Botun durumunu ayarla (opsiyonel)
+  console.log(`✅ ${client.user.tag} olarak giriş yapıldı ve aktif!`);
   client.user.setPresence({ 
-    activities: [{ name: 'Railway üzerinde', type: 3 }], // type 3 = WATCHING
+    activities: [{ name: 'Railway üzerinde', type: 3 }],
     status: 'online' 
   });
 });
 
-// Basit bir komut: !ping yazana pong cevabı verir (botun çalıştığını test etmek için)
 client.on('messageCreate', message => {
   if (message.author.bot) return;
   if (message.content === '!ping') {
@@ -26,13 +30,14 @@ client.on('messageCreate', message => {
   }
 });
 
-// Bağlantı koptuğunda Railway'in yeniden başlatması için process'ten çık
 client.on('disconnect', () => {
-  console.log('Bot bağlantısı kesildi, yeniden bağlanılıyor...');
+  console.log('⚠️ Bot bağlantısı kesildi, yeniden başlatılıyor...');
   process.exit(1);
 });
 
-// Hataları logla
 client.on('error', console.error);
 
-client.login(token);
+client.login(token).catch(err => {
+  console.error('❌ Giriş yapılamadı:', err.message);
+  process.exit(1);
+});
