@@ -9,6 +9,12 @@ const client = new Client({
 
 // Değişen satır:
 const token = process.env.TOKEN;
+console.log('TOKEN değişkeni var mı?', token ? 'Evet' : 'Hayır');
+if (token) {
+  console.log('Token uzunluğu:', token.length);
+} else {
+  console.log('process.env içindeki anahtarlar:', Object.keys(process.env));
+}
 
 if (!token) {
   console.error('❌ TOKEN environment variable bulunamadı!');
